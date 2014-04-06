@@ -19,34 +19,45 @@ for i in range(tests):
 	combo.append(test)
 	extra = extra + _len + 1
 
-for test in combo:
-	before = test[:test.index(1)]
-	after = test[test.index(1) + 1:]
-	if after != []:
-		after_sorted = after[:]
-		after_sorted.sort()
-		if after != after_sorted:
-			answers.append('N')
-			continue
-		else:
-			#perform other way search
-			if before != []:
-				if before[-1] > after[0]:
-					answers.append('N')
+for x in combo:
+	mtn = x[:]
+	branch = []
+	lake = []
+	num = 1
+
+	mtn.reverse()
+
+	while num != len(x) + 1:
+		if len(branch) > 0:
+			if branch[-1] != num:
+				if len(mtn) > 0:
+					if mtn[0] != num:
+						branch.append(mtn[0])
+						mtn = mtn[1:]
+					else:
+						lake.append(mtn[0])
+						mtn = mtn[1:]
+						num = num + 1
 				else:
-					answers.append('Y')
+					answers.append('N')
+					break
 			else:
-				answers.append('N')
-	else:
-		if before != []:
-			before_sorted = before[:]
-			before_sorted.sort()
-			before_sorted.reverse()
-			if before_sorted == before:
-				answers.append('N')
-			else:
-				answers.append('Y')
+				branch.reverse()
+				lake.append(branch[0])
+				branch = branch[1:]
+				branch.reverse()
+				num = num + 1
 		else:
-			answers.append('N')
+			if mtn[0] != num:
+				branch.append(mtn[0])
+				mtn = mtn[1:]
+			else:
+				lake.append(mtn[0])
+				mtn = mtn[1:]
+				num = num + 1
+		if len(lake) == len(x):
+			answers.append('Y')
+
+
 
 sys.stdout.write('\n'.join(answers))
